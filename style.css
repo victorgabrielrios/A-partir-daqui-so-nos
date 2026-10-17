@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -373,16 +374,17 @@ main {
     font-weight: bold;
 }
 
+/* BILHETINHO DO POTE — VINHO E ROXO */
 .bilhete {
     max-width: 440px;
     min-height: 135px;
     margin: 22px auto 12px;
-    padding: 23px 18px;
-    border: 1px solid #FFD2E5;
-    border-radius: 18px;
-    background: linear-gradient(135deg, #FFF4FA, #FFD7EB);
-    color: #4A1739;
-    box-shadow: 0 0 25px #FF167F33;
+    padding: 28px 22px;
+    border: 1px solid #FF4DA6;
+    border-radius: 22px;
+    background: linear-gradient(145deg, #45103B, #30103D, #200D32);
+    color: #FFE6F3;
+    box-shadow: 0 0 25px #FF167F30, inset 0 0 20px #A100FF12;
     opacity: 0;
     transform: translateY(12px) scale(.97);
     transition: opacity .4s ease, transform .4s ease;
@@ -396,11 +398,13 @@ main {
 .bilhete-coracao {
     display: block;
     color: #FF167F;
-    font-size: 25px;
+    font-size: 30px;
     margin-bottom: 12px;
+    text-shadow: 0 0 15px #FF167F88;
 }
 
 #mensagemPote {
+    color: #FFE6F3;
     line-height: 1.8;
     font-family: Georgia, serif;
     font-size: 17px;
@@ -420,16 +424,17 @@ main {
     font-size: 14px;
 }
 
+/* MENSAGEM DE SAUDADE — VINHO E ROXO */
 .mensagem-saudade {
     position: relative;
     margin: 25px auto 5px;
-    padding: 25px 20px;
+    padding: 28px 22px;
     max-width: 500px;
-    border: 1px solid #FF9BCB;
-    border-radius: 20px;
-    background: linear-gradient(135deg, #FFF0F8, #F4DFFF);
-    color: #5A1747;
-    box-shadow: 0 0 25px #FF167F55;
+    border: 1px solid #FF4DA6;
+    border-radius: 22px;
+    background: linear-gradient(145deg, #45103B, #30103D, #200D32);
+    color: #FFE6F3;
+    box-shadow: 0 0 25px #FF167F30, inset 0 0 20px #A100FF12;
     line-height: 1.9;
     opacity: 0;
     transform: translateY(15px) scale(.97);
@@ -437,6 +442,7 @@ main {
 }
 
 .mensagem-saudade p {
+    color: #FFE6F3;
     font-family: Georgia, serif;
     font-size: 17px;
 }
@@ -446,7 +452,8 @@ main {
     transform: translateY(0) scale(1);
 }
 
-.mensagem-saudade[hidden] {
+.mensagem-saudade[hidden],
+.mensagem-constelacao[hidden] {
     display: none !important;
 }
 
@@ -495,7 +502,6 @@ main {
 }
 
 .constelacao .estrela-interativa:hover {
-    transform: scale(1.35);
     color: #FFD700;
     text-shadow: 0 0 12px #FFD700, 0 0 25px #FF167F;
 }
@@ -526,28 +532,30 @@ main {
     z-index: 1;
 }
 
+/* MENSAGEM DA CONSTELAÇÃO — VINHO E ROXO */
 .mensagem-constelacao {
     min-height: 75px;
     max-width: 500px;
     margin: 20px auto 0;
-    padding: 20px;
-    border: 1px solid #DDA4FF88;
-    border-radius: 18px;
+    padding: 25px 22px;
+    border: 1px solid #B96AFF;
+    border-radius: 22px;
     color: #FFE6F3;
-    background: linear-gradient(135deg, #45103B, #25103E);
+    background: linear-gradient(145deg, #45103B, #30103D, #200D32);
+    box-shadow: 0 0 25px #A100FF30, inset 0 0 20px #A100FF12;
     line-height: 1.8;
     opacity: 0;
     transform: translateY(10px);
     transition: opacity .4s ease, transform .4s ease;
 }
 
+.mensagem-constelacao p {
+    color: #FFE6F3;
+}
+
 .mensagem-constelacao.visivel {
     opacity: 1;
     transform: translateY(0);
-}
-
-.mensagem-constelacao[hidden] {
-    display: none !important;
 }
 
 .instrucao-constelacao {
@@ -591,8 +599,13 @@ footer {
     }
 
     .mensagem-constelacao {
-        padding: 17px 14px;
+        padding: 20px 16px;
     }
+}
+
+/* ACESSIBILIDADE */
+[hidden] {
+    display: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
