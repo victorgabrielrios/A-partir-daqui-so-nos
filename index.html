@@ -208,6 +208,60 @@
     Feito com carinho para guardar o começo da nossa história ♥
 </footer>
 
+
 <script src="script.js"></script>
+
+<script>
+(function () {
+    function configurarPote() {
+        const botao = document.getElementById("botaoPote");
+        const mensagem = document.getElementById("mensagemPote");
+        const bilhete = document.getElementById("bilhete");
+
+        if (!botao || !mensagem || !bilhete) return;
+
+        const textos = [
+            "Você é uma das partes mais bonitas da minha vida. ♥",
+            "Que nunca faltem motivos para a gente sorrir junto.",
+            "Gosto da paz que sinto quando estou com você. ♥",
+            "Que nossa história seja cheia de carinho e respeito.",
+            "Se pudesse guardar um momento em um potinho, guardaria um dos nossos.",
+            "Você deixa meus dias mais especiais sem nem perceber.",
+            "Que a gente continue criando lembranças bonitas.",
+            "Meu desejo é que nunca falte carinho entre nós. ♥",
+            "Cada dia ao seu lado pode virar uma lembrança especial.",
+            "Este bilhetinho é só um lembrete de que você é especial."
+        ];
+
+        if (botao.dataset.poteIndependente === "sim") return;
+        botao.dataset.poteIndependente = "sim";
+
+        let anterior = -1;
+
+        botao.addEventListener("click", function () {
+            let indice;
+
+            do {
+                indice = Math.floor(Math.random() * textos.length);
+            } while (indice === anterior);
+
+            anterior = indice;
+            mensagem.textContent = textos[indice];
+            bilhete.hidden = false;
+            mensagem.hidden = false;
+            bilhete.classList.add("visivel");
+
+            bilhete.style.display = "block";
+        });
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", configurarPote);
+    } else {
+        configurarPote();
+    }
+})();
+</script>
+    
 </body>
 </html>
