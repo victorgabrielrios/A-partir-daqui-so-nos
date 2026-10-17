@@ -63,10 +63,12 @@ if (ceu) {
         estrela.style.height = tamanho + "px";
         estrela.style.left = Math.random() * 100 + "%";
         estrela.style.top = Math.random() * 100 + "%";
+
         estrela.style.setProperty(
             "--duracao",
             (Math.random() * 3 + 2) + "s"
         );
+
         estrela.style.animationDelay = Math.random() * 4 + "s";
 
         ceu.appendChild(estrela);
@@ -83,13 +85,22 @@ if (botaoCarta && conteudoCarta) {
         const estaAberta = !conteudoCarta.hidden;
 
         conteudoCarta.hidden = estaAberta;
-        botaoCarta.setAttribute("aria-expanded", String(!estaAberta));
 
-        document.getElementById("textoEnvelope").textContent =
-            estaAberta ? "Abrir minha carta" : "Fechar minha carta";
+        botaoCarta.setAttribute(
+            "aria-expanded",
+            String(!estaAberta)
+        );
+
+        const textoEnvelope = document.getElementById("textoEnvelope");
+
+        if (textoEnvelope) {
+            textoEnvelope.textContent =
+                estaAberta ? "Abrir minha carta" : "Fechar minha carta";
+        }
 
         if (!estaAberta) {
             setTimeout(revelarTrechosVisiveis, 100);
+
             setTimeout(() => {
                 conteudoCarta.scrollIntoView({
                     behavior: "smooth",
@@ -171,5 +182,68 @@ if (botaoPote && bilhete && mensagemPote) {
         requestAnimationFrame(() => {
             bilhete.classList.add("visivel");
         });
+    });
+}
+
+
+// QUANDO SENTIR SAUDADE
+const mensagensSaudade = [
+    "Maysa, se eu pudesse agora, te daria um abraço bem apertado e ficaria um pouquinho ali, pertinho de você. ♥",
+
+    "Se hoje a saudade apertar, lembra que ainda temos muitos momentos bonitos para viver juntos.",
+
+    "Queria estar aí agora para ouvir sua voz, ver seu sorriso e conversar sobre qualquer bobagem. ♥",
+
+    "Mesmo nos dias comuns, você continua sendo alguém muito especial na minha vida.",
+
+    "Fecha os olhos por um instante e imagina aquele abraço que a gente ainda vai dar quando se encontrar. ♥",
+
+    "Não importa se hoje estamos longe um do outro: espero que você sinta todo o carinho que tenho por você.",
+
+    "Se estiver com saudade, guarda um sorriso para mim. Quero ver esse sorriso de perto quando a gente se encontrar. ♥",
+
+    "Um lembrete para você: nossa história está só começando, e ainda temos muitas páginas para escrever juntos.",
+
+    "Queria poder transformar essa mensagem em um abraço de verdade. Por enquanto, fica aqui todo o meu carinho. ♥",
+
+    "Quando a saudade aparecer, lembra de uma coisa: eu gosto muito de compartilhar a vida com você."
+];
+
+const botaoSaudade = document.getElementById("botaoSaudade");
+const mensagemSaudade = document.getElementById("mensagemSaudade");
+const textoSaudade = document.getElementById("textoSaudade");
+
+let ultimaMensagemSaudade = -1;
+
+if (botaoSaudade && mensagemSaudade && textoSaudade) {
+    botaoSaudade.addEventListener("click", () => {
+        let indice;
+
+        do {
+            indice = Math.floor(
+                Math.random() * mensagensSaudade.length
+            );
+        } while (
+            mensagensSaudade.length > 1 &&
+            indice === ultimaMensagemSaudade
+        );
+
+        ultimaMensagemSaudade = indice;
+
+        textoSaudade.textContent = mensagensSaudade[indice];
+
+        mensagemSaudade.hidden = false;
+        mensagemSaudade.classList.remove("visivel");
+
+        requestAnimationFrame(() => {
+            mensagemSaudade.classList.add("visivel");
+        });
+
+        setTimeout(() => {
+            mensagemSaudade.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest"
+            });
+        }, 100);
     });
 }
