@@ -1,4 +1,3 @@
-
 * {
     margin: 0;
     padding: 0;
@@ -51,7 +50,7 @@ body {
     to { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
 }
 
-/* CÉU ESTRELADO */
+/* CÉU ESTRELADO DO FUNDO */
 .ceu-estrelado {
     position: fixed;
     inset: 0;
@@ -127,6 +126,7 @@ body {
     font-weight: bold;
     box-shadow: 0 0 25px #FF167F77;
     transition: transform .2s;
+    cursor: pointer;
 }
 
 .botao:hover {
@@ -406,6 +406,158 @@ main {
     font-size: 17px;
 }
 
+/* QUANDO SENTIR SAUDADE */
+.saudade-secao {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at top right, #FF167F33, transparent 50%),
+        linear-gradient(145deg, #45103B, #30103D);
+}
+
+.saudade-secao .botao {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.mensagem-saudade {
+    position: relative;
+    margin: 25px auto 5px;
+    padding: 25px 20px;
+    max-width: 500px;
+    border: 1px solid #FF9BCB;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #FFF0F8, #F4DFFF);
+    color: #5A1747;
+    box-shadow: 0 0 25px #FF167F55;
+    line-height: 1.9;
+    opacity: 0;
+    transform: translateY(15px) scale(.97);
+    transition: opacity .5s ease, transform .5s ease;
+}
+
+.mensagem-saudade p {
+    font-family: Georgia, serif;
+    font-size: 17px;
+}
+
+.mensagem-saudade.visivel {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.mensagem-saudade[hidden] {
+    display: none !important;
+}
+
+/* NOSSA CONSTELAÇÃO */
+.constelacao-secao {
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 50% 100%, #7A168866, transparent 65%),
+        linear-gradient(180deg, #100923, #241039 75%, #45103B);
+}
+
+.constelacao {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    height: 340px;
+    margin: 25px auto 15px;
+    overflow: hidden;
+    border: 1px solid #A100FF88;
+    border-radius: 22px;
+    background:
+        radial-gradient(circle at 20% 25%, #FF167F22, transparent 30%),
+        radial-gradient(circle at 80% 75%, #A100FF33, transparent 35%),
+        #100923;
+    box-shadow: inset 0 0 35px #00000088, 0 0 25px #A100FF33;
+}
+
+.constelacao .estrela-interativa {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    color: #FFFFFF;
+    background: transparent;
+    font-size: 21px;
+    cursor: pointer;
+    text-shadow: 0 0 8px #FFFFFF, 0 0 18px #FF8CC4;
+    animation: pulsarEstrela 2s ease-in-out infinite alternate;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.constelacao .estrela-interativa:hover {
+    transform: scale(1.35);
+    color: #FFD700;
+    text-shadow: 0 0 12px #FFD700, 0 0 25px #FF167F;
+}
+
+.constelacao .estrela-interativa:focus-visible {
+    outline: 2px solid #FFD700;
+    outline-offset: 3px;
+}
+
+@keyframes pulsarEstrela {
+    from {
+        opacity: .65;
+        filter: drop-shadow(0 0 3px #FF9AD0);
+    }
+    to {
+        opacity: 1;
+        filter: drop-shadow(0 0 10px #A100FF);
+    }
+}
+
+.linha-constelacao {
+    position: absolute;
+    height: 2px;
+    transform-origin: left center;
+    background: linear-gradient(90deg, #FF8CC4AA, #A100FF66);
+    box-shadow: 0 0 8px #FF167F66;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.mensagem-constelacao {
+    min-height: 75px;
+    max-width: 500px;
+    margin: 20px auto 0;
+    padding: 20px;
+    border: 1px solid #DDA4FF88;
+    border-radius: 18px;
+    color: #FFE6F3;
+    background: linear-gradient(135deg, #45103B, #25103E);
+    line-height: 1.8;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .4s ease, transform .4s ease;
+}
+
+.mensagem-constelacao.visivel {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.mensagem-constelacao[hidden] {
+    display: none !important;
+}
+
+.instrucao-constelacao {
+    color: #E5B8FF;
+    font-size: 13px;
+    line-height: 1.8;
+    margin-top: 10px;
+}
+
+/* RODAPÉ */
 footer {
     position: relative;
     z-index: 1;
@@ -416,6 +568,7 @@ footer {
     line-height: 1.8;
 }
 
+/* ANIMAÇÕES */
 @keyframes pulsar {
     50% { transform: scale(1.12); }
 }
@@ -425,10 +578,30 @@ footer {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* CELULARES */
 @media (max-width: 480px) {
     .topo { min-height: 85vh; }
     .introducao { font-size: 14px; }
     .cartao { padding: 27px 18px; }
     .texto { font-size: 14px; }
     .papel-carta { padding: 20px 16px; }
+
+    .constelacao {
+        height: 300px;
+    }
+
+    .mensagem-constelacao {
+        padding: 17px 14px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
 }
