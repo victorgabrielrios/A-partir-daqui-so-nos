@@ -1,13 +1,12 @@
 
 const dataInicioNamoro = new Date(2026, 9, 16);
 
-// ===============================
+// =====================================
 // CONTADOR DE DIAS
-// ===============================
+// =====================================
 
 function atualizarContador() {
     const elementoDias = document.getElementById("dias");
-
     if (!elementoDias) return;
 
     const hoje = new Date();
@@ -23,79 +22,85 @@ function atualizarContador() {
     elementoDias.textContent = Math.max(0, diferenca);
 }
 
-atualizarContador();
+// =====================================
+// INICIALIZAÇÃO DO SITE
+// =====================================
 
-// ===============================
-// ESTRELAS DO FUNDO
-// ===============================
+function iniciarSite() {
+    atualizarContador();
 
-const ceuEstrelado = document.getElementById("ceuEstrelado");
+    // Estrelas do fundo
+    const ceuEstrelado = document.getElementById("ceuEstrelado");
 
-if (ceuEstrelado) {
-    for (let i = 0; i < 75; i++) {
-        const estrela = document.createElement("span");
+    if (ceuEstrelado && !ceuEstrelado.dataset.criado) {
+        ceuEstrelado.dataset.criado = "sim";
 
-        estrela.className = "estrela";
-        estrela.style.left = Math.random() * 100 + "%";
-        estrela.style.top = Math.random() * 100 + "%";
-        estrela.style.setProperty(
-            "--duracao",
-            1.5 + Math.random() * 4 + "s"
-        );
-
-        ceuEstrelado.appendChild(estrela);
+        for (let i = 0; i < 75; i++) {
+            const estrela = document.createElement("span");
+            estrela.className = "estrela";
+            estrela.style.left = Math.random() * 100 + "%";
+            estrela.style.top = Math.random() * 100 + "%";
+            estrela.style.setProperty(
+                "--duracao",
+                1.5 + Math.random() * 4 + "s"
+            );
+            ceuEstrelado.appendChild(estrela);
+        }
     }
+
+    iniciarCarta();
+    iniciarPote();
+    iniciarSaudade();
+    iniciarConstelacao();
 }
 
-// ===============================
+// =====================================
 // CARTA SECRETA
-// ===============================
+// =====================================
 
-const botaoCarta = document.getElementById("botaoCarta");
-const conteudoCarta = document.getElementById("conteudoCarta");
+function iniciarCarta() {
+    const botao = document.getElementById("botaoCarta");
+    const conteudo = document.getElementById("conteudoCarta");
 
-if (botaoCarta && conteudoCarta) {
-    botaoCarta.addEventListener("click", function () {
-        const estaAberta = !conteudoCarta.hidden;
+    if (!botao || !conteudo || botao.dataset.ativo) return;
+    botao.dataset.ativo = "sim";
 
-        conteudoCarta.hidden = estaAberta;
-        botaoCarta.textContent = estaAberta
-            ? "Abrir nossa cartinha ♥"
-            : "Fechar nossa cartinha ♥";
+    botao.addEventListener("click", function () {
+        const abrir = conteudo.hidden;
 
-        if (!estaAberta) {
-            conteudoCarta.scrollIntoView({
+        conteudo.hidden = !abrir;
+        botao.textContent = abrir
+            ? "Fechar nossa cartinha ♥"
+            : "Abrir nossa cartinha ♥";
+
+        if (abrir) {
+            conteudo.scrollIntoView({
                 behavior: "smooth",
                 block: "center"
             });
         }
     });
-}
 
-// Revela os trechos da carta conforme a pessoa rola a página.
+    const trechos = document.querySelectorAll(".trecho-carta");
 
-const trechosCarta = document.querySelectorAll(".trecho-carta");
-
-if (trechosCarta.length > 0) {
-    const observadorCarta = new IntersectionObserver(
-        function (entradas) {
+    if ("IntersectionObserver" in window && trechos.length) {
+        const observador = new IntersectionObserver(function (entradas) {
             entradas.forEach(function (entrada) {
                 if (entrada.isIntersecting) {
                     entrada.target.classList.add("revelado");
                 }
             });
-        },
-        { threshold: 0.2 }
-    );
+        }, { threshold: 0.2 });
 
-    trechosCarta.forEach(function (trecho) {
-        observadorCarta.observe(trecho);
-    });
+        trechos.forEach(function (trecho) {
+            observador.observe(trecho);
+        });
+    }
 }
 
-// ===============================
-// POTE DE MENSAGENS
-// ===============================
+// =====================================
+// POTE DE MENSAGENS — CORRIGIDO
+// =====================================
 
 const mensagensPote = [
     "Você é uma das partes mais bonitas da minha vida. ♥",
@@ -110,13 +115,32 @@ const mensagensPote = [
     "Meu desejo é que nunca faltem motivos para a gente sorrir juntos."
 ];
 
-const botaoPote = document.getElementById("botaoPote");
-const mensagemPote = document.getElementById("mensagemPote");
-
 let ultimaMensagemPote = -1;
 
-if (botaoPote && mensagemPote) {
-    botaoPote.addEventListener("click", function () {
+function iniciarPote() {
+    const botao =
+        document.getElementById("botaoPote") ||
+        document.querySelector(".pote-botao");
+
+    const mensagem =
+        document.getElementById("mensagemPote") ||
+        document.querySelector("#pote .bilhete") ||
+        document.querySelector(".bilhete");
+
+    if (!botao || !mensagem || botao.dataset.poteAtivo) {
+        if (!botao || !mensagem) {
+            console.error(
+                "Pote: confira os elementos do pote no index.html."
+            );
+        }
+        return;
+    }
+
+    botao.dataset.poteAtivo = "sim";
+
+    botao.addEventListener("click", function (evento) {
+        evento.preventDefault();
+
         let indice;
 
         do {
@@ -127,19 +151,25 @@ if (botaoPote && mensagemPote) {
         );
 
         ultimaMensagemPote = indice;
-        mensagemPote.textContent = mensagensPote[indice];
-        mensagemPote.classList.add("visivel");
 
-        mensagemPote.scrollIntoView({
+        mensagem.textContent = mensagensPote[indice];
+        mensagem.hidden = false;
+        mensagem.classList.add("visivel");
+
+        if (mensagem.style.display === "none") {
+            mensagem.style.display = "block";
+        }
+
+        mensagem.scrollIntoView({
             behavior: "smooth",
             block: "nearest"
         });
     });
 }
 
-// ===============================
+// =====================================
 // QUANDO SENTIR SAUDADE
-// ===============================
+// =====================================
 
 const mensagensSaudade = [
     "Respira fundo e lembra que você é muito especial. ♥",
@@ -154,14 +184,17 @@ const mensagensSaudade = [
     "Às vezes, uma mensagem pequena pode carregar um carinho enorme."
 ];
 
-const botaoSaudade = document.getElementById("botaoSaudade");
-const mensagemSaudade = document.getElementById("mensagemSaudade");
-const textoSaudade = document.getElementById("textoSaudade");
-
 let ultimaMensagemSaudade = -1;
 
-if (botaoSaudade && mensagemSaudade && textoSaudade) {
-    botaoSaudade.addEventListener("click", function () {
+function iniciarSaudade() {
+    const botao = document.getElementById("botaoSaudade");
+    const caixa = document.getElementById("mensagemSaudade");
+    const texto = document.getElementById("textoSaudade");
+
+    if (!botao || !caixa || !texto || botao.dataset.ativo) return;
+    botao.dataset.ativo = "sim";
+
+    botao.addEventListener("click", function () {
         let indice;
 
         do {
@@ -172,150 +205,134 @@ if (botaoSaudade && mensagemSaudade && textoSaudade) {
         );
 
         ultimaMensagemSaudade = indice;
-        textoSaudade.textContent = mensagensSaudade[indice];
-        mensagemSaudade.hidden = false;
-        mensagemSaudade.classList.add("visivel");
+        texto.textContent = mensagensSaudade[indice];
+        caixa.hidden = false;
+        caixa.classList.add("visivel");
     });
 }
 
-// ===============================
+// =====================================
 // NOSSA CONSTELAÇÃO
-// ===============================
-
-const areaConstelacao = document.getElementById("areaConstelacao");
-const mensagemConstelacao = document.getElementById("mensagemConstelacao");
-const textoConstelacao = document.getElementById("textoConstelacao");
+// =====================================
 
 const estrelasConstelacao = [
     {
-        x: 12,
-        y: 28,
+        x: 12, y: 28,
         mensagem: "Você é uma das coincidências mais bonitas que a vida colocou no meu caminho. ♥"
     },
     {
-        x: 30,
-        y: 15,
+        x: 30, y: 15,
         mensagem: "Se eu pudesse escolher um lugar para olhar as estrelas, seria ao seu lado."
     },
     {
-        x: 47,
-        y: 35,
+        x: 47, y: 35,
         mensagem: "Cada estrela guarda uma história. Eu espero que a gente tenha muitas para contar."
     },
     {
-        x: 65,
-        y: 17,
+        x: 65, y: 17,
         mensagem: "Você faz parte do meu universo de um jeito que palavras nem sempre conseguem explicar. ♥"
     },
     {
-        x: 84,
-        y: 32,
+        x: 84, y: 32,
         mensagem: "Que nunca faltem carinho, respeito e motivos para sorrirmos juntos."
     },
     {
-        x: 72,
-        y: 65,
+        x: 72, y: 65,
         mensagem: "Nossa história começou em 16 de outubro de 2026. Que venham muitos capítulos bonitos."
     },
     {
-        x: 45,
-        y: 78,
+        x: 45, y: 78,
         mensagem: "Mesmo em noites diferentes, duas pessoas podem olhar para o mesmo céu."
     },
     {
-        x: 20,
-        y: 65,
+        x: 20, y: 65,
         mensagem: "Entre tantas estrelas, esta mensagem encontrou você. Guarde-a com carinho. ♥"
     }
 ];
 
-if (areaConstelacao && mensagemConstelacao && textoConstelacao) {
-    const linhasConstelacao = [
-        [0, 1],
-        [1, 2],
-        [2, 3],
-        [3, 4],
-        [4, 5],
-        [5, 6],
-        [6, 7],
-        [7, 0],
-        [2, 6]
+function iniciarConstelacao() {
+    const area = document.getElementById("areaConstelacao");
+    const caixa = document.getElementById("mensagemConstelacao");
+    const texto = document.getElementById("textoConstelacao");
+
+    if (!area || !caixa || !texto || area.dataset.criada) return;
+    area.dataset.criada = "sim";
+
+    const ligacoes = [
+        [0, 1], [1, 2], [2, 3], [3, 4],
+        [4, 5], [5, 6], [6, 7], [7, 0], [2, 6]
     ];
 
-    function desenharLinhasConstelacao() {
-        areaConstelacao
-            .querySelectorAll(".linha-constelacao")
-            .forEach(function (linha) {
-                linha.remove();
-            });
+    function desenharLinhas() {
+        area.querySelectorAll(".linha-constelacao").forEach(function (linha) {
+            linha.remove();
+        });
 
-        const largura = areaConstelacao.clientWidth;
-        const altura = areaConstelacao.clientHeight;
+        const largura = area.clientWidth;
+        const altura = area.clientHeight;
 
-        linhasConstelacao.forEach(function (ligacao) {
-            const estrelaA = estrelasConstelacao[ligacao[0]];
-            const estrelaB = estrelasConstelacao[ligacao[1]];
+        ligacoes.forEach(function (par) {
+            const a = estrelasConstelacao[par[0]];
+            const b = estrelasConstelacao[par[1]];
 
-            const x1 = largura * estrelaA.x / 100;
-            const y1 = altura * estrelaA.y / 100;
-            const x2 = largura * estrelaB.x / 100;
-            const y2 = altura * estrelaB.y / 100;
-
-            const distancia = Math.sqrt(
-                Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)
-            );
-
-            const angulo = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+            const x1 = largura * a.x / 100;
+            const y1 = altura * a.y / 100;
+            const x2 = largura * b.x / 100;
+            const y2 = altura * b.y / 100;
 
             const linha = document.createElement("span");
             linha.className = "linha-constelacao";
             linha.style.left = x1 + "px";
             linha.style.top = y1 + "px";
-            linha.style.width = distancia + "px";
-            linha.style.transform = "rotate(" + angulo + "deg)";
+            linha.style.width = Math.hypot(x2 - x1, y2 - y1) + "px";
+            linha.style.transform =
+                "rotate(" + Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI + "deg)";
 
-            areaConstelacao.appendChild(linha);
+            area.appendChild(linha);
         });
     }
 
     estrelasConstelacao.forEach(function (estrela, indice) {
-        const botaoEstrela = document.createElement("button");
+        const botao = document.createElement("button");
 
-        botaoEstrela.type = "button";
-        botaoEstrela.className = "estrela-interativa";
-        botaoEstrela.textContent = "✦";
-        botaoEstrela.setAttribute(
+        botao.type = "button";
+        botao.className = "estrela-interativa";
+        botao.textContent = "✦";
+        botao.setAttribute(
             "aria-label",
             "Revelar mensagem da estrela " + (indice + 1)
         );
 
-        botaoEstrela.style.left = estrela.x + "%";
-        botaoEstrela.style.top = estrela.y + "%";
-        botaoEstrela.style.transform = "translate(-50%, -50%)";
+        botao.style.left = estrela.x + "%";
+        botao.style.top = estrela.y + "%";
+        botao.style.transform = "translate(-50%, -50%)";
 
-        botaoEstrela.addEventListener("click", function () {
-            textoConstelacao.textContent = estrela.mensagem;
-            mensagemConstelacao.hidden = false;
-            mensagemConstelacao.classList.add("visivel");
+        botao.addEventListener("click", function () {
+            texto.textContent = estrela.mensagem;
+            caixa.hidden = false;
+            caixa.classList.add("visivel");
 
-            areaConstelacao
-                .querySelectorAll(".estrela-interativa")
-                .forEach(function (outraEstrela) {
-                    outraEstrela.classList.remove("estrela-escolhida");
-                });
-
-            botaoEstrela.classList.add("estrela-escolhida");
-
-            mensagemConstelacao.scrollIntoView({
-                behavior: "smooth",
-                block: "nearest"
+            area.querySelectorAll(".estrela-interativa").forEach(function (outra) {
+                outra.classList.remove("estrela-escolhida");
             });
+
+            botao.classList.add("estrela-escolhida");
         });
 
-        areaConstelacao.appendChild(botaoEstrela);
+        area.appendChild(botao);
     });
 
-    desenharLinhasConstelacao();
+    desenharLinhas();
+    window.addEventListener("resize", desenharLinhas);
+}
 
-    window.addEventListener("resize", desenharLinhasConstelacao);
-            }
+// =====================================
+// INICIAR QUANDO O HTML ESTIVER PRONTO
+// =====================================
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", iniciarSite);
+} else {
+    iniciarSite();
+}
+    
